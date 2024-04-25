@@ -5,7 +5,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,10 +31,16 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun MainScreen(
     data: List<String>,
+    onVerboseClick: (String) -> Unit,
     onDebugClick: (String) -> Unit,
     onInfoClick: (String) -> Unit,
+    onWarnClick: (String) -> Unit,
     onErrorClick: (String) -> Unit,
-    onMultipleLogClick: (String) -> Unit,
+    onMultipleVerboseLogClick: (String) -> Unit,
+    onMultipleDebugLogClick: (String) -> Unit,
+    onMultipleInfoLogClick: (String) -> Unit,
+    onMultipleWarnLogClick: (String) -> Unit,
+    onMultipleErrorLogClick: (String) -> Unit,
 ) {
     var selectedItemIndex by remember {
         mutableIntStateOf(value = 0)
@@ -52,13 +59,27 @@ fun MainScreen(
             onItemClick = { index -> selectedItemIndex = index }
         )
 
-        Buttons(
-            selectedItemValue = selectedItemValue,
-            onDebugClick = onDebugClick,
-            onInfoClick = onInfoClick,
-            onErrorClick = onErrorClick,
-            onMultipleLogClick = onMultipleLogClick
-        )
+        Column {
+            ButtonsRow(
+                selectedItemValue = selectedItemValue,
+                forVerbose = "Verbose" to onVerboseClick,
+                forDebug = "Debug" to onDebugClick,
+                forInfo = "Info" to onInfoClick,
+                forWarn = "Warn" to onWarnClick,
+                forError = "Error" to onErrorClick,
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            ButtonsRow(
+                selectedItemValue = selectedItemValue,
+                forVerbose = "Multi V" to onMultipleVerboseLogClick,
+                forDebug = "Multi D" to onMultipleDebugLogClick,
+                forInfo = "Multi I" to onMultipleInfoLogClick,
+                forWarn = "Multi W" to onMultipleWarnLogClick,
+                forError = "Multi E" to onMultipleErrorLogClick,
+            )
+        }
     }
 }
 
@@ -97,38 +118,45 @@ private fun ItemText(isSelected: Boolean, value: String, onClick: () -> Unit) {
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun Buttons(
+private fun ButtonsRow(
     selectedItemValue: String,
-    onDebugClick: (String) -> Unit,
-    onInfoClick: (String) -> Unit,
-    onErrorClick: (String) -> Unit,
-    onMultipleLogClick: (String) -> Unit,
+    forVerbose: Pair<String,(String) -> Unit>,
+    forDebug: Pair<String,(String) -> Unit>,
+    forInfo: Pair<String,(String) -> Unit>,
+    forWarn: Pair<String,(String) -> Unit>,
+    forError: Pair<String,(String) -> Unit>,
 ) {
-    Row(
+    FlowRow(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.Absolute.SpaceEvenly,
+        maxItemsInEachRow = 3
     ) {
-
         LogButton(
-            text = "Debug",
+            text = forVerbose.first,
+            color = Color(0xFF95C45E),
+            onClick = { forVerbose.second(selectedItemValue) }
+        )
+        LogButton(
+            text = forDebug.first,
             color = Color(0xFF3BA0CE),
-            onClick = { onDebugClick(selectedItemValue) }
+            onClick = { forDebug.second(selectedItemValue) }
         )
         LogButton(
-            text = "Info",
+            text = forInfo.first,
             color = Color(0xFFECC348),
-            onClick = { onInfoClick(selectedItemValue) }
+            onClick = { forInfo.second(selectedItemValue) }
         )
         LogButton(
-            text = "Error",
+            text = forWarn.first,
+            color = Color(0xFF7658AC),
+            onClick = { forWarn.second(selectedItemValue) }
+        )
+        LogButton(
+            text = forError.first,
             color = Color(0xFFCE554C),
-            onClick = { onErrorClick(selectedItemValue) }
-        )
-        LogButton(
-            text = "Multi",
-            color = Color(0xFFA97EF5),
-            onClick = { onMultipleLogClick(selectedItemValue) }
+            onClick = { forError.second(selectedItemValue) }
         )
     }
 }
@@ -146,11 +174,10 @@ private fun LogButton(text: String, color: Color, onClick: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    MainScreen(
-        data = listOf("first", "second", "third"),
-        onDebugClick = {},
-        onInfoClick = {},
-        onErrorClick = {},
-        onMultipleLogClick = {}
-    )
+//    MainScreen(
+//        data = listOf("first", "second", "third"),
+//        onDebugClick = {},
+//        onInfoClick = {},
+//        onErrorClick = {},
+//    )
 }
