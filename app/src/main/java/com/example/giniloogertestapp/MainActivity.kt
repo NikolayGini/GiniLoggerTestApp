@@ -7,17 +7,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.example.gini_logger.GiniLogger
-import com.example.gini_logger.Level
-import com.example.gini_logger.LogBuilder
-import com.example.gini_logger.Logger
-import com.example.gini_logger.WritingMode
-import com.example.gini_logger.log
-import com.example.gini_logger.logD
-import com.example.gini_logger.logE
-import com.example.gini_logger.logI
-import com.example.gini_logger.logV
-import com.example.gini_logger.logW
+import com.example.gini_logger.data.core.GiniLogger
+import com.example.gini_logger.data.core.log
+import com.example.gini_logger.data.core.logD
+import com.example.gini_logger.data.core.logE
+import com.example.gini_logger.data.core.logI
+import com.example.gini_logger.data.core.logV
+import com.example.gini_logger.data.core.logW
+import com.example.gini_logger.data.default_implementation.DefaultWritingMode
+import com.example.gini_logger.domain.LogBuilder
+import com.example.gini_logger.domain.Logger
+import com.example.gini_logger.domain.WritingMode
+import com.example.gini_logger.domain.model.Level
 import com.example.giniloogertestapp.ui.theme.GiniLoogerTestAppTheme
 
 enum class CustomWritingMode : WritingMode { Local, Remote }
@@ -39,28 +40,29 @@ class MainActivity : ComponentActivity() {
 
         GiniLogger.initializeDefault(
             /** uncomment this to check logging to file */
-//            writingMode = WritingMode.Default.File(filePath = filesDir.path)
+//            writingMode = DefaultWritingMode.File(filePath = filesDir.path)
             /** uncomment this to check logging to file and console */
-//            writingMode = WritingMode.Default.ConsoleAndFile(filePath = filesDir.path)
+//            writingMode = DefaultWritingMode.ConsoleAndFile(filePath = filesDir.path)
         )
 
         /** customising default implementation */
 //        GiniLogger.initializeDefault(
 //            minLevel = Level.Debug,
-//            writingMode = WritingMode.Default.Console,
+//            writingMode = DefaultWritingMode.Console,
 //            formatter = { message -> "return formatted message: $message" },
-//            tagger = { "custom tag logic" },
-//            loggerProvider = { mode: WritingMode.Default ->
+//            tag = "custom tag",
+//            loggerProvider = { mode: DefaultWritingMode ->
 //                when (mode) {
-//                    is WritingMode.Default.File -> {
+//                    is DefaultWritingMode.File -> {
+//                        /** your logic */
 //                        Logger { level: Level, tag: String, message: String -> /** your logic */ }
 //                    }
 //
-//                    WritingMode.Default.Console -> {
+//                    DefaultWritingMode.Console -> {
 //                        Logger { level: Level, tag: String, message: String -> /** your logic */ }
 //                    }
 //
-//                    is WritingMode.Default.ConsoleAndFile -> {
+//                    is DefaultWritingMode.ConsoleAndFile -> {
 //                        Logger { level: Level, tag: String, message: String -> /** your logic */ }
 //                    }
 //                }
@@ -85,19 +87,23 @@ class MainActivity : ComponentActivity() {
 //            minLevel = Level.Debug,
 //            writingMode = CustomWritingMode.Remote,
 //            formatter = { message -> "return formatted message: $message" },
-//            tagger = { "custom tag logic" },
+//            tag = "custom tag",
 //            loggerProvider = { mode: CustomWritingMode ->
 //                when (mode) {
 //                    CustomWritingMode.Local -> {
+//                        /** your logic */
+//                        /** your logic */
 //                        Logger { level: Level, tag: String, message: String -> /** your logic */ }
 //                    }
 //
 //                    CustomWritingMode.Remote -> {
+//                        /** your logic */
 //                        Logger { level: Level, tag: String, message: String -> /** your logic */ }
 //                    }
 //                }
 //            },
 //            logBuilderProvider = {
+//
 //                /** provide your custom LogBuilder */
 //                object : LogBuilder {
 //
