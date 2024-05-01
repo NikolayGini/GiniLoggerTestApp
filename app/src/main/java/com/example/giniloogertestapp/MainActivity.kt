@@ -14,15 +14,11 @@ import com.example.gini_logger.data.core.logE
 import com.example.gini_logger.data.core.logI
 import com.example.gini_logger.data.core.logV
 import com.example.gini_logger.data.core.logW
-import com.example.gini_logger.data.default_implementation.DefaultWritingMode
+import com.example.gini_logger.data.default_implementation.logger.ConsoleAndFileLogger
+import com.example.gini_logger.data.default_implementation.logger.FileLogger
 import com.example.gini_logger.domain.LogBuilder
-import com.example.gini_logger.domain.Logger
-import com.example.gini_logger.domain.WritingMode
 import com.example.gini_logger.domain.model.Level
 import com.example.giniloogertestapp.ui.theme.GiniLoogerTestAppTheme
-
-enum class CustomWritingMode : WritingMode { Local, Remote }
-
 
 class MainActivity : ComponentActivity() {
 
@@ -38,72 +34,20 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        GiniLogger.initializeDefault(
+        GiniLogger.initialize(
             /** uncomment this to check logging to file */
-//            writingMode = DefaultWritingMode.File(filePath = filesDir.path)
+//            logger = FileLogger(filePath = filesDir.path)
             /** uncomment this to check logging to file and console */
-//            writingMode = DefaultWritingMode.ConsoleAndFile(filePath = filesDir.path)
+//            logger = ConsoleAndFileLogger(fileLogger = FileLogger(filePath = filesDir.path))
         )
-
-        /** customising default implementation */
-//        GiniLogger.initializeDefault(
-//            minLevel = Level.Debug,
-//            writingMode = DefaultWritingMode.Console,
-//            formatter = { message -> "return formatted message: $message" },
-//            tag = "custom tag",
-//            loggerProvider = { mode: DefaultWritingMode ->
-//                when (mode) {
-//                    is DefaultWritingMode.File -> {
-//                        /** your logic */
-//                        Logger { level: Level, tag: String, message: String -> /** your logic */ }
-//                    }
-//
-//                    DefaultWritingMode.Console -> {
-//                        Logger { level: Level, tag: String, message: String -> /** your logic */ }
-//                    }
-//
-//                    is DefaultWritingMode.ConsoleAndFile -> {
-//                        Logger { level: Level, tag: String, message: String -> /** your logic */ }
-//                    }
-//                }
-//            },
-//            logBuilderProvider = {
-//                /** provide your custom LogBuilder */
-//                object : LogBuilder {
-//
-//                    override fun build(): String {
-//                        return "build your string"
-//                    }
-//
-//                    override fun message(value: Any) {
-//                        /** use this block to build multiple log */
-//                    }
-//                }
-//            }
-//        )
 
         /** custom implementation */
 //        GiniLogger.initialize(
 //            minLevel = Level.Debug,
-//            writingMode = CustomWritingMode.Remote,
+//            logger = { level: Level, tag: String, message: String -> /** your logic */ },
 //            formatter = { message -> "return formatted message: $message" },
 //            tag = "custom tag",
-//            loggerProvider = { mode: CustomWritingMode ->
-//                when (mode) {
-//                    CustomWritingMode.Local -> {
-//                        /** your logic */
-//                        /** your logic */
-//                        Logger { level: Level, tag: String, message: String -> /** your logic */ }
-//                    }
-//
-//                    CustomWritingMode.Remote -> {
-//                        /** your logic */
-//                        Logger { level: Level, tag: String, message: String -> /** your logic */ }
-//                    }
-//                }
-//            },
 //            logBuilderProvider = {
-//
 //                /** provide your custom LogBuilder */
 //                object : LogBuilder {
 //
