@@ -7,15 +7,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.example.gini_logger.data.core.GiniLogger
-import com.example.gini_logger.data.core.log
-import com.example.gini_logger.data.core.logD
-import com.example.gini_logger.data.core.logE
-import com.example.gini_logger.data.core.logI
-import com.example.gini_logger.data.core.logV
-import com.example.gini_logger.data.core.logW
+import com.example.gini_logger.core.GiniLogger
+import com.example.gini_logger.core.log
+import com.example.gini_logger.core.logD
+import com.example.gini_logger.core.logE
+import com.example.gini_logger.core.logI
+import com.example.gini_logger.core.logV
+import com.example.gini_logger.core.logW
 import com.example.gini_logger.data.default_implementation.logger.ConsoleAndFileLogger
 import com.example.gini_logger.data.default_implementation.logger.FileLogger
+import com.example.gini_logger.data.default_implementation.logger.RemoteLogger
 import com.example.gini_logger.domain.LogBuilder
 import com.example.gini_logger.domain.model.Level
 import com.example.giniloogertestapp.ui.theme.GiniLoogerTestAppTheme
@@ -39,6 +40,8 @@ class MainActivity : ComponentActivity() {
 //            logger = FileLogger(filePath = filesDir.path)
             /** uncomment this to check logging to file and console */
 //            logger = ConsoleAndFileLogger(fileLogger = FileLogger(filePath = filesDir.path))
+            /** uncomment this to check logging to remote */
+            logger = RemoteLogger.getInstance(url = "https://echo.free.beeceptor.com")
         )
 
         /** custom implementation */
